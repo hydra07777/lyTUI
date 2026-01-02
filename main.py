@@ -1,3 +1,10 @@
+"""
+lyTUI - A Terminal User Interface music player with synchronized lyrics.
+
+This application provides a modern TUI for playing MP3 files with karaoke-style
+lyrics display, inspired by btop's design.
+"""
+
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Static, ProgressBar
@@ -15,6 +22,11 @@ def fmt(sec):
 
 
 class MusicApp(App):
+    """
+    Main application class for lyTUI music player.
+
+    Handles the TUI layout, user interactions, and audio playback coordination.
+    """
 
     BINDINGS = [
         ("space", "toggle", "Play/Pause"),

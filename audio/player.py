@@ -1,7 +1,17 @@
+"""
+Audio player module using Pygame for MP3 playback.
+"""
+
 from mutagen.mp3 import MP3
 import pygame
 
 class AudioPlayer:
+    """
+    Simple audio player using Pygame mixer.
+
+    Handles loading, playing, pausing, and position tracking of MP3 files.
+    """
+
     def __init__(self):
         pygame.mixer.init()
         self.length = 0

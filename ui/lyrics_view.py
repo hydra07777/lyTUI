@@ -1,8 +1,18 @@
+"""
+Lyrics display widget with karaoke-style highlighting.
+"""
+
 import re
 from textual.widgets import Static
 from mutagen.id3 import ID3
 
 class LyricsView(Static):
+    """
+    Widget for displaying synchronized lyrics with current line highlighting.
+
+    Parses USLT tags from MP3 files and displays lyrics with karaoke effect.
+    """
+
     def __init__(self):
         super().__init__("No lyrics")
         self.lines = []
