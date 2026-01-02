@@ -52,3 +52,4 @@ A Terminal User Interface (TUI) music player with synchronized lyrics display, i
 ## License
 
 MIT License
+w
