@@ -1,5 +1,6 @@
-<div>
-    <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/python.svg" width="40" />
+<div align="center">
+  <img src="https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-MIT-green" />
 </div>
 
 # lyTUI
