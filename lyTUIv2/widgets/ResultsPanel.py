@@ -13,16 +13,16 @@ class ResultsPanel(Vertical):
         self.remove_children()
         label = Label(f"Résultats : {id}")
         lv = ListView(
-            *[ListItem(Label(str(track.title)), id=f"{results.index(track)}") for track in results]
+            *[ListItem(Label(str(track.title)), name= f"{track._id}") for track in results]
         )
         self.mount(label)
         self.mount(lv)
 
     @on(ListView.Selected)
     def on_track_selected( self, event : ListView.Selected):
-        value = event.item.id
+        id = int(event.item.name)
 
-        self.post_message(MusicSelection(value))
+        self.post_message(MusicSelection(id))
         
     
 
