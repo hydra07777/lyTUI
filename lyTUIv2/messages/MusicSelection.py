@@ -1,7 +1,7 @@
 from textual.message import Message
-from models.tracks import Track
+
 
 class MusicSelection(Message) :
-    def __init__(self, music : Track):
-        self.music = music
+    def __init__(self, id : int):
+        self.id = id
         super().__init__()
