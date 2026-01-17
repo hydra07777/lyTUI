@@ -1,15 +1,19 @@
-import pygame
+import vlc
 
 class AudioEngine:
     def __init__(self):
-        pygame.mixer.init()
-    
+        self.player = vlc.MediaPlay()
+
     def play(self, song):
-        pygame.mixer.music.load(song)
-        pygame.mixer.music.play()
-    
+        self.player.set_media(vlc.Media(song))
+        self.player.play()
     def pause(self):
-        pygame.mixer.music.pause()
-    
+        self.player.pause()
+       
     def stop(self):
-        pygame.mixer.music.stop
+        self.player.stop()
+
+    def get_time(self):
+        """temps en millisecondes"""
+        ms = self.player.get_time()
+        return max(0, ms//1000)
