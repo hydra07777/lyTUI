@@ -7,22 +7,27 @@ class MusicLoader():
 
     def __init__(self):
         self.musics : list[Track] = []
-        self.music : Track = None
+        self.music  = None
     
     def load_music_from_dir(self, folder : str):
         SUPPORTED = (".mp3", ".m4a", ".wav", ".flac", ".ogg")
         id = 0
-        for file in sorted(os.listdir(folder)):
-        
-            if file.lower().endswith(SUPPORTED) :
-                path = os.path.join(folder, file)
+
+        if os.path.isfile(folder) and folder.lower().endswith(SUPPORTED):
+            files = [folder]
+        else:
+            files = [os.path.join(folder, file) for file in sorted(os.listdir(folder))]
+
+        for path in files:
+            if path.lower().endswith(SUPPORTED):
                 meta = get_metadata(path=path)
-                self.music = Track(id,
-                                   path,
-                                   meta["title"],
-                                   meta["album"],
-                                   meta["artist"],
-                                   meta["cover"]
+                self.music = Track(
+                    id,
+                    path,
+                    meta["title"],
+                    meta["album"],
+                    meta["artist"],
+                    meta["cover"],
                 )
 
                 self.musics.append(self.music)
@@ -30,4 +35,4 @@ class MusicLoader():
         print(self.musics)
 
 
-    
+
