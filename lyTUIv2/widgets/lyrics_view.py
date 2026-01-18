@@ -86,4 +86,3 @@ class LyricsView(Static) :
 
     
 
-LyricsView().load_lyrics_from_path("../Jérémy Frerot - Un homme.mp3")
