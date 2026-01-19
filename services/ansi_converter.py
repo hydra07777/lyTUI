@@ -17,7 +17,7 @@ def convert_cover_ansi(cover_byte):
 
     try:
         image = Image.open(io.BytesIO(cover_byte)).convert("RGB")
-        image = resize_image(image, 50)
+        image = resize_image(image, 55)
 
         pixels = image.load()
         lines = []
