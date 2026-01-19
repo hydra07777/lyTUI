@@ -58,8 +58,8 @@ class LyricsView(Static) :
     def _update_display( self):
         # Afficher 2 lignes avant, la courante surlignée, et 1 ligne après
 
-        start = max(0, self.index-2)
-        end = min(len(self.lines), self.index+2)
+        start = max(0, self.index-3)
+        end = min(len(self.lines), self.index+4)
         print(f"{start}, {end}")
 
         display_lines = []

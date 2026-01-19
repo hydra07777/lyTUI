@@ -64,7 +64,7 @@ class lyTUI(App):
         self.results = ResultsPanel()
         self.music_panel = MusicPanel()
         self.ui_log = Log()
-        yield self.ui_log
+        # yield self.ui_log
         yield LyHeader("lyTUI")
         yield Static('test', id='test')
         with Horizontal() :
@@ -147,12 +147,12 @@ class lyTUI(App):
     
     def action_list(self):
         devices = self.audio.get_output_devices()
-        self.ui_log.write("--- Périphériques Audio Disponibles ---")
-        for d in devices:
-            self.ui_log.write(f"[{d['id']}] {d['name']}")
+        # self.ui_log.write("--- Périphériques Audio Disponibles ---")
+        # for d in devices:
+        #     self.ui_log.write(f"[{d['id']}] {d['name']}")
         
     def change_device(self, device_id):
-        self.ui_log.write(f"Changement vers le périphérique ID: {device_id}")
+        # self.ui_log.write(f"Changement vers le périphérique ID: {device_id}")
         self.audio.set_output_device(device_id)
     
     def log_ui(self, msg):

@@ -6,9 +6,9 @@ from textual import on
 class Option(Vertical) :
     def compose(self):
         yield ListView(
-            ListItem(Label('All musics'), id="all"),
-            ListItem(Label('Artists'), id="artist"),
-            ListItem(Label('Album'), id="album")
+            ListItem(Label('󰓇 All musics'), id="all"), # Utilise des emojis si tu n'as pas de Nerd Font
+            ListItem(Label('󰠃 Artists'), id="artist"),
+            ListItem(Label('󰀥 Albums'), id="album")
         )
     @on(ListView.Selected)
     def on_selected(self, event: ListView.Selected):
