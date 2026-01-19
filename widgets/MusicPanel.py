@@ -47,6 +47,9 @@ LyricsView {
     scrollbar-gutter: stable;
     border: round #2a2a2a;
     background: #181818;
+    content-align: center middle;
+        
+    
     
 }
 
