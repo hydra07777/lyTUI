@@ -1,3 +1,5 @@
+sounddevice
+av
+numpy
 textual
-pygame
-mutagen
+PIL
