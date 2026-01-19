@@ -20,7 +20,7 @@ A Terminal User Interface (TUI) music player with synchronized lyrics display, i
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/lyTUI.git
+   git clone https://github.com/hydra07777/lyTUI.git
    cd lyTUI
    ```
 
@@ -35,7 +35,7 @@ A Terminal User Interface (TUI) music player with synchronized lyrics display, i
 2. Run the application:
 
    ```bash
-   python main.py
+   python app.py
    ```
 
 3. Use the keyboard shortcuts:
