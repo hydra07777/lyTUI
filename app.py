@@ -15,6 +15,14 @@ from messages.MusicSelection import MusicSelection
 from widgets.MusicPanel import MusicPanel
 from widgets.AudioDeviceModal import AudioDeviceModal
 from messages.AudioDeviceSelected import AudioDeviceSelected
+from messages.TrackActionsRequested import TrackActionsRequested
+from messages.FetchLyricsRequested import FetchLyricsRequested
+from messages.LyricsResultSelected import LyricsResultSelected
+from widgets.TrackActionsModal import TrackActionsModal
+from widgets.LyricsSearchModal import LyricsSearchModal
+from widgets.LyricsWarningModal import LyricsWarningModal
+from services import lrclib_client
+from services.lyrics_writer import write_lyrics_to_file
 
 class lyTUI(App):
 
@@ -59,6 +67,12 @@ class lyTUI(App):
             background: transparent;
         }
     """
+
+    def _find_track(self, track_id: int):
+        for track in self.biblio.musics:
+            if track._id == track_id:
+                return track
+        return None
 
     def compose(self):
         self.results = ResultsPanel()
@@ -120,6 +134,57 @@ class lyTUI(App):
         devices = self.audio.get_output_devices()
         # On affiche juste la modale, pas besoin de callback ici
         self.push_screen(AudioDeviceModal(devices))
+
+    @on(TrackActionsRequested)
+    def on_track_actions_requested(self, event: TrackActionsRequested):
+        self.push_screen(TrackActionsModal(event.track_id))
+
+    @on(FetchLyricsRequested)
+    def on_fetch_lyrics_requested(self, event: FetchLyricsRequested):
+        track = self._find_track(event.track_id)
+        if not track:
+            return
+        self.run_worker(self._fetch_lyrics(track), exclusive=True)
+
+    async def _fetch_lyrics(self, track):
+        try:
+            results = await lrclib_client.search(track.title, track.artist)
+        except Exception:
+            self.notify("Erreur lors de la récupération des paroles", severity="error")
+            return
+        self.push_screen(LyricsSearchModal(results, track._id))
+
+    @on(LyricsResultSelected)
+    def on_lyrics_result_selected(self, event: LyricsResultSelected):
+        track = self._find_track(event.track_id)
+        if not track:
+            return
+
+        if event.synced_lyrics:
+            self._write_lyrics(track, event.synced_lyrics)
+        elif event.plain_lyrics:
+            self.push_screen(
+                LyricsWarningModal(track._id, event.plain_lyrics, self._write_lyrics_by_id)
+            )
+        else:
+            self.notify("Aucunes paroles disponibles pour ce résultat", severity="warning")
+
+    def _write_lyrics_by_id(self, track_id: int, lyrics_text: str):
+        track = self._find_track(track_id)
+        if track:
+            self._write_lyrics(track, lyrics_text)
+
+    def _write_lyrics(self, track, lyrics_text: str):
+        try:
+            write_lyrics_to_file(track.path, lyrics_text)
+        except Exception:
+            self.notify("Erreur lors de l'écriture des paroles", severity="error")
+            return
+
+        if self.state.song == track.title:
+            self.music_panel.lyrics.load_lyrics_from_path(track.path)
+
+        self.notify("Paroles enregistrées !")
 
     def refresh_ui( self) :
         
