@@ -1,3 +1,4 @@
+import random
 from textual.containers import Vertical
 from textual.widgets import Static, ProgressBar
 from widgets.lyrics_view import LyricsView
@@ -22,6 +23,15 @@ MusicPanel {
 #test {
     height: auto;
     content-align: center middle;
+    margin-bottom: 1;
+}
+
+/* Barre de progression ASCII (style Debian: ---O---) */
+#ascii_progress {
+    height: auto;
+    content-align: center middle;
+    color: #1DB954;
+    text-style: bold;
     margin-bottom: 1;
 }
 
@@ -89,10 +99,15 @@ MusicPanel > Static {
 }
     """
 
+    ASCII_PROGRESS_WIDTH = 34
+    SCRAMBLE_ZONE = 5
+    SCRAMBLE_CHARS = "!<>-_\\/[]{}~=+*^?#$%&01"
+
     def compose(self):
         self.lyrics = LyricsView()
 
         yield Static("No music selected", id="test")
+        yield Static("", id="ascii_progress")
         yield Static("—", id="tt")
 
         yield ProgressBar(total=300, id="progress")
@@ -109,6 +124,37 @@ MusicPanel > Static {
 
         self.lyrics.load_lyrics_from_path(track.path)
         self.query_one("#test").update(text)
+
+    def update_ascii_progress(self, elapsed: float, duration: float):
+        width = self.ASCII_PROGRESS_WIDTH
+
+        if not duration or duration <= 0:
+            ratio = 0.0
+        else:
+            ratio = max(0.0, min(1.0, elapsed / duration))
+
+        cursor = int(ratio * (width - 1))
+        scramble_end = min(width, cursor + 1 + self.SCRAMBLE_ZONE)
+
+        elapsed_str = f"{int(elapsed) // 60:02}:{int(elapsed) % 60:02}"
+        duration_str = f"{int(duration) // 60:02}:{int(duration) % 60:02}" if duration else "--:--"
+
+        text = Text(f"{elapsed_str} [")
+        for i in range(width):
+            if i < cursor:
+                text.append("-")
+            elif i == cursor:
+                text.append("O", style="bold white")
+            elif i < scramble_end:
+                text.append(random.choice(self.SCRAMBLE_CHARS), style="bold #ff5555")
+            else:
+                text.append("-")
+        text.append(f"] {duration_str}")
+
+        self.query_one("#ascii_progress").update(text)
+
+    def reset_ascii_progress(self):
+        self.query_one("#ascii_progress").update("")
 
     def update_elapsed_time(self, time: int):
         minutes = time // 60
