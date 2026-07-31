@@ -6,6 +6,10 @@ from messages.FetchLyricsRequested import FetchLyricsRequested
 
 
 class TrackActionsModal(ModalScreen):
+    BINDINGS = [
+        ("escape", "dismiss", "Fermer"),
+    ]
+
     def __init__(self, track_id: int):
         super().__init__()
         self.track_id = track_id
@@ -15,6 +19,7 @@ class TrackActionsModal(ModalScreen):
             yield Label("🎵 Actions", id="modal_title")
             yield OptionList(
                 Option("Fetch the lyrics", id="fetch_lyrics"),
+                Option("Fermer", id="close"),
                 id="track_actions_list",
             )
 

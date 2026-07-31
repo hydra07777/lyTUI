@@ -6,6 +6,10 @@ from messages.LyricsResultSelected import LyricsResultSelected
 
 
 class LyricsSearchModal(ModalScreen):
+    BINDINGS = [
+        ("escape", "dismiss", "Fermer"),
+    ]
+
     def __init__(self, results: list[dict], track_id: int):
         super().__init__()
         self.results = results
@@ -17,6 +21,7 @@ class LyricsSearchModal(ModalScreen):
 
             if not self.results:
                 yield Label("Aucun résultat trouvé.")
+                yield OptionList(Option("Fermer", id="close"), id="lyrics_results_list")
                 return
 
             options = []
@@ -30,9 +35,14 @@ class LyricsSearchModal(ModalScreen):
                 label = f"{artist} — {title} ({album}, {duration_str}) {sync_tag}"
                 options.append(Option(label, id=str(i)))
 
+            options.append(Option("Fermer", id="close"))
             yield OptionList(*options, id="lyrics_results_list")
 
     def on_option_list_option_selected(self, event):
+        if event.option.id == "close":
+            self.dismiss()
+            return
+
         index = int(event.option.id)
         result = self.results[index]
         self.post_message(

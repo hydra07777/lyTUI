@@ -7,6 +7,10 @@ from textual.widgets.option_list import Option
 class LyricsWarningModal(ModalScreen):
     """Confirmation avant écriture de paroles non synchronisées."""
 
+    BINDINGS = [
+        ("escape", "dismiss", "Annuler"),
+    ]
+
     def __init__(self, track_id: int, plain_lyrics: str, on_confirm):
         super().__init__()
         self.track_id = track_id
