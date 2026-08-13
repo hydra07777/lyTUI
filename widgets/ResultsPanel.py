@@ -44,4 +44,3 @@ class ResultsPanel(Vertical):
         
     
 
-# ResultsPanel().show_results('all', [{'title': 'Un homme', 'artist': 'Jérémy Frerot', 'album': 'Un homme', 'year': 2025}])
