@@ -100,8 +100,8 @@ MusicPanel > Static {
     """
 
     ASCII_PROGRESS_WIDTH = 34
-    SCRAMBLE_ZONE = 5
-    SCRAMBLE_CHARS = "!<>-_\\/[]{}~=+*^?#$%&01"
+    SCRAMBLE_ZONE = 4
+    SCRAMBLE_CHARS = "!<>-_\\/[]{}~=+*^?#$%&"
 
     def compose(self):
         self.lyrics = LyricsView()
@@ -134,19 +134,21 @@ MusicPanel > Static {
             ratio = max(0.0, min(1.0, elapsed / duration))
 
         cursor = int(ratio * (width - 1))
-        scramble_end = min(width, cursor + 1 + self.SCRAMBLE_ZONE)
+        zone = self.SCRAMBLE_ZONE
+        half = zone // 2
+        zone_start = max(0, cursor - half)
+        zone_end = min(width, cursor + half + 1)
 
-        elapsed_str = f"{int(elapsed) // 60:02}:{int(elapsed) % 60:02}"
-        duration_str = f"{int(duration) // 60:02}:{int(duration) % 60:02}" if duration else "--:--"
+        elapsed_str = f"{int(elapsed) // 60}:{int(elapsed) % 60:02}"
+        duration_str = f"{int(duration) // 60}:{int(duration) % 60:02}" if duration else "--:--"
 
         text = Text(f"{elapsed_str} [")
         for i in range(width):
-            if i < cursor:
-                text.append("-")
-            elif i == cursor:
-                text.append("O", style="bold white")
-            elif i < scramble_end:
-                text.append(random.choice(self.SCRAMBLE_CHARS), style="bold #ff5555")
+            if zone_start <= i <= zone_end:
+                if i == cursor:
+                    text.append("O", style="bold white")
+                else:
+                    text.append(random.choice(self.SCRAMBLE_CHARS), style="bold #ff5555")
             else:
                 text.append("-")
         text.append(f"] {duration_str}")
@@ -154,7 +156,9 @@ MusicPanel > Static {
         self.query_one("#ascii_progress").update(text)
 
     def reset_ascii_progress(self):
-        self.query_one("#ascii_progress").update("")
+        width = self.ASCII_PROGRESS_WIDTH
+        bar = "-" * width
+        self.query_one("#ascii_progress").update(Text(f"0:00 [{bar}] --:--"))
 
     def update_elapsed_time(self, time: int):
         minutes = time // 60
