@@ -17,7 +17,8 @@ class LyricsView(Static) :
             uslts = audio.getall('USLT')
 
             if not uslts :
-                return "no lyrics"
+                self.update("No lyrics")
+                return
             
             timed_lyrics = None
 
@@ -26,16 +27,15 @@ class LyricsView(Static) :
                     timed_lyrics = tag.text
                     break
             if not timed_lyrics:
-                return "lyrics found, but not sync"
+                self.update("Lyrics found, but not synced")
+                return
             
-            ## ah ah ah ah
-
-           
             timed_lyrics = timed_lyrics.replace("\r", "\n")
             self._parse_lyrics(timed_lyrics)
             
         except Exception as e:
             print(f"{e}")
+            self.update("No lyrics")
 
     def _parse_lyrics(self, text: str):
         pattern = re.compile(r"\[(\d+):(\d+\.\d+)\]\s*(.*)")
